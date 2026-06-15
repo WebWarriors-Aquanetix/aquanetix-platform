@@ -7,6 +7,12 @@ using WebWarriors.Aquanetix.Platform.Dashboard.Application.Internal.QueryService
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Dashboard.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.CommandServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.Internal.CommandServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.Internal.QueryServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.QueryServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Domain.Repositories;
+using WebWarriors.Aquanetix.Platform.Monitoring.Infrastructure.Persistence.EFC.Repositories;
 using WebWarriors.Aquanetix.Platform.Shared.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
@@ -69,6 +75,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Dashboard
 builder.Services.AddScoped<IQualityAnalysisRepository, QualityAnalysisRepository>();
 builder.Services.AddScoped<IQualityAnalysisQueryService, QualityAnalysisQueryService>();
+
+// Monitoring (Alerts)
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
+builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);
