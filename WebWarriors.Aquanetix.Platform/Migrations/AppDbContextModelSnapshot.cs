@@ -61,6 +61,115 @@ namespace WebWarriors.Aquanetix.Platform.Migrations
                     b.ToTable("quality_analyses", (string)null);
                 });
 
+            modelBuilder.Entity("WebWarriors.Aquanetix.Platform.Monitoring.Domain.Model.Aggregates.Alert", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("DeviceId")
+                        .HasColumnType("int")
+                        .HasColumnName("device_id");
+
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("device_name");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("location");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("message");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("severity");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("status");
+
+                    b.Property<double>("Threshold")
+                        .HasColumnType("double")
+                        .HasColumnName("threshold");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("datetime")
+                        .HasColumnName("timestamp");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("type");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("double")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_alerts");
+
+                    b.ToTable("alerts");
+                });
+
+            modelBuilder.Entity("WebWarriors.Aquanetix.Platform.Dashboard.Domain.Model.Aggregates.QualityAnalysis", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AnomalyStatus")
+                        .HasMaxLength(20)
+                        .HasColumnType("int")
+                        .HasColumnName("anomaly_status");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("DetectedParameters")
+                        .HasMaxLength(50)
+                        .HasColumnType("int")
+                        .HasColumnName("detected_parameters");
+
+                    b.Property<bool>("HasContaminationPeakPrediction")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("has_contamination_peak_prediction");
+
+                    b.Property<int>("SensorSourceId")
+                        .HasColumnType("int")
+                        .HasColumnName("sensor_source_id");
+
+                    b.Property<double>("SeverityScore")
+                        .HasColumnType("double")
+                        .HasColumnName("severity_score");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("quality_analyses", (string)null);
+                });
+
             modelBuilder.Entity("WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Aggregates.Device", b =>
                 {
                     b.Property<int>("Id")

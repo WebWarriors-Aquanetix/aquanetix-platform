@@ -13,6 +13,12 @@ using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.QuerySer
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.CommandServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.Internal.CommandServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.Internal.QueryServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.QueryServices;
+using WebWarriors.Aquanetix.Platform.Monitoring.Domain.Repositories;
+using WebWarriors.Aquanetix.Platform.Monitoring.Infrastructure.Persistence.EFC.Repositories;
 using WebWarriors.Aquanetix.Platform.Shared.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
@@ -78,6 +84,11 @@ builder.Services.AddScoped<IQualityAnalysisQueryService, QualityAnalysisQuerySer
 builder.Services.AddScoped<IWaterBatchRepository, WaterBatchRepository>();
 builder.Services.AddScoped<IWaterBatchQueryService, WaterBatchQueryService>();
 builder.Services.AddScoped<IWaterBatchCommandService, WaterBatchCommandService>();
+
+// Monitoring (Alerts)
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
+builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);
