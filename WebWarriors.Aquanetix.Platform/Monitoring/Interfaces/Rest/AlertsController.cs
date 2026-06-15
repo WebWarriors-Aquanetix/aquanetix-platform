@@ -39,6 +39,19 @@ public class AlertsController(
             this, alert, _errorLocalizer, _problemDetailsFactory,
             found => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(found)));
     }
+    
+    [HttpGet("device/{deviceId:int}")]
+    [SwaggerOperation(Summary = "Get alerts by device id", OperationId = "GetAlertsByDeviceId")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Alerts found", typeof(IEnumerable<AlertResource>))]
+    public async Task<IActionResult> GetAlertsByDeviceId([FromRoute] int deviceId, CancellationToken cancellationToken)
+    {
+        var query = new GetAlertsByDeviceIdQuery(deviceId);
+        var alerts = await alertQueryService.Handle(query, cancellationToken);
+        
+        var alertResources = alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity);
+        
+        return Ok(alertResources);
+    }
 
   
 }
