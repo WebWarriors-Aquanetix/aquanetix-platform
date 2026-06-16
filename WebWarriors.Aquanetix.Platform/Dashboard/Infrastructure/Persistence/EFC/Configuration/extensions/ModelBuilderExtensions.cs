@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Model.Aggregates;
+using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Aggregates;
+using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Entities;
 
 namespace WebWarriors.Aquanetix.Platform.Dashboard.Infrastructure.Persistence.EFC.Configuration.Extensions;
 
@@ -25,5 +27,12 @@ public static class ModelBuilderExtensions
             .HasColumnName("created_at");
         builder.Entity<QualityAnalysis>().Property(q => q.UpdatedAt)
             .HasColumnName("updated_at");
+        builder.Entity<ThresholdConfiguration>().Property<int?>("DeviceId")
+            .HasColumnName("device_id_fk");
+        builder.Entity<Device>()
+            .HasMany(d => d.Thresholds)
+            .WithOne()
+            .HasForeignKey("DeviceId")
+            .HasConstraintName("FK_threshold_device");
     }
 }

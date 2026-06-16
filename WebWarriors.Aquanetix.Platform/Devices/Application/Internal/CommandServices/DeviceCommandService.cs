@@ -4,6 +4,7 @@ using WebWarriors.Aquanetix.Platform.Devices.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Aggregates;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Command;
+using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Entities;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Shared.Application.Model;
 using WebWarriors.Aquanetix.Platform.Shared.Domain.Repositories;
@@ -17,7 +18,6 @@ public class DeviceCommandService(
     IStringLocalizer<ErrorMessages> localizer)
     : IDeviceCommandService
 {
-    /// <inheritdoc />
     public async Task<Result<Device>> Handle(CreateDeviceCommand command, CancellationToken cancellationToken)
     {
         var device = new Device(command.OwnerId, command.SerialNumber, command.DeviceType);
@@ -44,7 +44,6 @@ public class DeviceCommandService(
         }
     }
 
-    /// <inheritdoc />
     public async Task<Result<Device>> Handle(UpdateDeviceCommand command, CancellationToken cancellationToken)
     {
         var device = await deviceRepository.FindByIdAsync(command.Id, cancellationToken);
@@ -71,6 +70,42 @@ public class DeviceCommandService(
         catch (Exception)
         {
             return Result<Device>.Failure(DevicesError.InvalidDeviceData,
+                localizer[nameof(DevicesError.InvalidDeviceData)]);
+        }
+    }
+
+    public async Task<Result<ThresholdConfiguration>> Handle(CreateThresholdCommand command, CancellationToken cancellationToken)
+    {
+        var device = await deviceRepository.FindByIdAsync(command.DeviceId, cancellationToken);
+        if (device is null)
+            return Result<ThresholdConfiguration>.Failure(DevicesError.DeviceNotFound,
+                localizer[nameof(DevicesError.DeviceNotFound)]);
+        try
+        {
+            var threshold = new ThresholdConfiguration(
+                command.DeviceId,
+                command.MinValue,
+                command.MaxValue,
+                command.Unit,
+                command.AlertLevel);
+            device.AddThreshold(threshold);
+            deviceRepository.Update(device);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<ThresholdConfiguration>.Success(threshold);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<ThresholdConfiguration>.Failure(DevicesError.OperationCancelled,
+                localizer[nameof(DevicesError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<ThresholdConfiguration>.Failure(DevicesError.InvalidDeviceData,
+                localizer[nameof(DevicesError.InvalidDeviceData)]);
+        }
+        catch (Exception)
+        {
+            return Result<ThresholdConfiguration>.Failure(DevicesError.InvalidDeviceData,
                 localizer[nameof(DevicesError.InvalidDeviceData)]);
         }
     }
