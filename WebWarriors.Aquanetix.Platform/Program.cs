@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi;
 using MySql.Data.MySqlClient;
+using WebWarriors.Aquanetix.Platform.Dashboard.Application.CommandServices;
+using WebWarriors.Aquanetix.Platform.Dashboard.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.Internal.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Repositories;
@@ -96,6 +98,7 @@ builder.Services.AddScoped<IQualityAnalysisQueryService, QualityAnalysisQuerySer
 builder.Services.AddScoped<IWaterBatchRepository, WaterBatchRepository>();
 builder.Services.AddScoped<IWaterBatchQueryService, WaterBatchQueryService>();
 builder.Services.AddScoped<IWaterBatchCommandService, WaterBatchCommandService>();
+builder.Services.AddScoped<IQualityAnalysisCommandService, QualityAnalysisCommandService>();
 
 // Monitoring (Alerts)
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
