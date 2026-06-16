@@ -7,6 +7,10 @@ using WebWarriors.Aquanetix.Platform.Dashboard.Application.Internal.QueryService
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Dashboard.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Devices.Application.Internal.QueryServices;
+using WebWarriors.Aquanetix.Platform.Devices.Application.QueryServices;
+using WebWarriors.Aquanetix.Platform.Devices.Domain.Repositories;
+using WebWarriors.Aquanetix.Platform.Devices.Infrastructure.Persistence.EFC.Repositories;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.QueryServices;
@@ -89,6 +93,10 @@ builder.Services.AddScoped<IWaterBatchCommandService, WaterBatchCommandService>(
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
+
+// Devices
+builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
+builder.Services.AddScoped<IDeviceQueryService, DeviceQueryService>();
 
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);

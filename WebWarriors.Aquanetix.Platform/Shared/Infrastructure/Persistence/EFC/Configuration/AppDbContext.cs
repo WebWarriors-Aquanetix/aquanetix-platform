@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebWarriors.Aquanetix.Platform.Dashboard.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Aggregates;
 using WebWarriors.Aquanetix.Platform.Devices.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.Monitoring.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Infrastructure.Persistence.EFC.Configuration.Extensions;
@@ -13,6 +14,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
    
     public DbSet<Alert> Alerts { get; set; }
+    public DbSet<Device> Devices { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
