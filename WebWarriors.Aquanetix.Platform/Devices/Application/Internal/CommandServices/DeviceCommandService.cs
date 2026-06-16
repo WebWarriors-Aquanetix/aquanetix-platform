@@ -43,4 +43,35 @@ public class DeviceCommandService(
                 localizer[nameof(DevicesError.InvalidDeviceData)]);
         }
     }
+
+    /// <inheritdoc />
+    public async Task<Result<Device>> Handle(UpdateDeviceCommand command, CancellationToken cancellationToken)
+    {
+        var device = await deviceRepository.FindByIdAsync(command.Id, cancellationToken);
+        if (device is null)
+            return Result<Device>.Failure(DevicesError.DeviceNotFound,
+                localizer[nameof(DevicesError.DeviceNotFound)]);
+        try
+        {
+            device.Update(command);
+            deviceRepository.Update(device);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<Device>.Success(device);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<Device>.Failure(DevicesError.OperationCancelled,
+                localizer[nameof(DevicesError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<Device>.Failure(DevicesError.InvalidDeviceData,
+                localizer[nameof(DevicesError.InvalidDeviceData)]);
+        }
+        catch (Exception)
+        {
+            return Result<Device>.Failure(DevicesError.InvalidDeviceData,
+                localizer[nameof(DevicesError.InvalidDeviceData)]);
+        }
+    }
 }
