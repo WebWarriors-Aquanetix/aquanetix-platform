@@ -30,7 +30,6 @@
         <Folder Include="Shared\Infrastructure\Persistence\EFC\Interceptors\" />
         <Folder Include="Subscription\Domain\Model\Exceptions\" />
         <Folder Include="Subscription\Domain\Model\ValueObjects\" />
-        <Folder Include="Subscription\Infrastructure\Persistence\EFC\Configuration\" />
         <Folder Include="Subscription\Resources\" />
     </ItemGroup>
 
