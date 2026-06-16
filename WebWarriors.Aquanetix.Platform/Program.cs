@@ -1,3 +1,8 @@
+using WebWarriors.Aquanetix.Platform.Subscription.Application.Internal.CommandServices;
+using WebWarriors.Aquanetix.Platform.Subscription.Application.Internal.QueryServices;
+using WebWarriors.Aquanetix.Platform.Subscription.Domain.Repositories;
+using WebWarriors.Aquanetix.Platform.Subscription.Domain.Services;
+using WebWarriors.Aquanetix.Platform.Subscription.Infrastructure.Persistence.EFC.Repositories;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +109,11 @@ builder.Services.AddScoped<IDeviceCommandService, DeviceCommandService>();
 
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);
+
+// Subscription
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
+builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
 
 var app = builder.Build();
 
