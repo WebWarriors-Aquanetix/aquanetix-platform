@@ -6,4 +6,5 @@ namespace WebWarriors.Aquanetix.Platform.Devices.Application.QueryServices;
 public interface IDeviceQueryService
 {
     Task<Device?> Handle(GetDeviceByIdQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<Device>> Handle(GetAllDevicesQuery query, CancellationToken cancellationToken);
 }

@@ -5,15 +5,11 @@ using WebWarriors.Aquanetix.Platform.Monitoring.Infrastructure.Persistence.EFC.C
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.Interceptors;
-using WebWarriors.Aquanetix.Platform.Monitoring.Domain.Model.Aggregates;
 
 namespace WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
-   
-    public DbSet<Alert> Alerts { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
         builder.AddInterceptors(new AuditableEntityInterceptor());
@@ -24,10 +20,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
         builder.UseSnakeCaseNamingConvention();
-
-        builder.ApplyServiceDesignConfiguration();
-        builder.ApplyMonitoringConfiguration();
         builder.ApplyDashboardConfiguration();
         builder.ApplyDevicesConfiguration();
+        builder.ApplyMonitoringConfiguration();
+        builder.ApplyServiceDesignConfiguration();
     }
 }
