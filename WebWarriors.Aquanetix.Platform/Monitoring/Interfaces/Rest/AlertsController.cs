@@ -26,7 +26,14 @@ public class AlertsController(
     private readonly IStringLocalizer<ErrorMessages> _errorLocalizer = errorLocalizer;
     private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
 
-  
+    [HttpGet]
+    [SwaggerOperation(Summary = "Get all alerts", OperationId = "GetAllAlerts")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Alerts retrieved", typeof(IEnumerable<AlertResource>))]
+    public async Task<IActionResult> GetAllAlerts(CancellationToken cancellationToken)
+    {
+        var alerts = await alertQueryService.Handle(new GetAllAlertsQuery(), cancellationToken);
+        return Ok(alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 
     [HttpGet("{alertId:int}")]
     [SwaggerOperation(Summary = "Get alert by id", OperationId = "GetAlertById")]
@@ -39,28 +46,29 @@ public class AlertsController(
             this, alert, _errorLocalizer, _problemDetailsFactory,
             found => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(found)));
     }
-    
+
     [HttpGet("device/{deviceId:int}")]
     [SwaggerOperation(Summary = "Get alerts by device id", OperationId = "GetAlertsByDeviceId")]
     [SwaggerResponse(StatusCodes.Status200OK, "Alerts found", typeof(IEnumerable<AlertResource>))]
     public async Task<IActionResult> GetAlertsByDeviceId([FromRoute] int deviceId, CancellationToken cancellationToken)
     {
-        var query = new GetAlertsByDeviceIdQuery(deviceId);
-        var alerts = await alertQueryService.Handle(query, cancellationToken);
-        
-        var alertResources = alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity);
-        
-        return Ok(alertResources);
-    }
-    
-    [HttpGet]
-    [SwaggerOperation(Summary = "Get all alerts", OperationId = "GetAllAlerts")]
-    [SwaggerResponse(StatusCodes.Status200OK, "Alerts retrieved", typeof(IEnumerable<AlertResource>))]
-    public async Task<IActionResult> GetAllAlerts(CancellationToken cancellationToken)
-    {
-        var alerts = await alertQueryService.Handle(new GetAllAlertsQuery(), cancellationToken);
+        var alerts = await alertQueryService.Handle(new GetAlertsByDeviceIdQuery(deviceId), cancellationToken);
         return Ok(alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity));
     }
 
-  
+    [HttpPost]
+    [SwaggerOperation(Summary = "Create an alert", OperationId = "CreateAlert")]
+    [SwaggerResponse(StatusCodes.Status201Created, "Alert created", typeof(AlertResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid request")]
+    public async Task<IActionResult> CreateAlert([FromBody] CreateAlertResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = CreateAlertCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result  = await alertCommandService.Handle(command, cancellationToken);
+        return MonitoringActionResultAssembler.ToActionResultFromCreateAlertResult(
+            this, result, _errorLocalizer, _problemDetailsFactory,
+            created => CreatedAtAction(nameof(GetAlertById),
+                new { alertId = created.Id },
+                AlertResourceFromEntityAssembler.ToResourceFromEntity(created)));
+    }
 }

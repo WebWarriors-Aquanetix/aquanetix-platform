@@ -4,9 +4,7 @@ using WebWarriors.Aquanetix.Platform.Shared.Application.Model;
 
 namespace WebWarriors.Aquanetix.Platform.Monitoring.Application.CommandServices;
 
-
 public interface IAlertCommandService
 {
     Task<Result<Alert>> Handle(CreateAlertCommand command, CancellationToken cancellationToken);
-    /*Task<Result<Alert>> Handle(UpdateAlertCommand command, CancellationToken cancellationToken);*/
 }

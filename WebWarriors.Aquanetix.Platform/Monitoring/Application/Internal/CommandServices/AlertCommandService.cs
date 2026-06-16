@@ -17,8 +17,6 @@ public class AlertCommandService(
     IStringLocalizer<ErrorMessages> localizer)
     : IAlertCommandService
 {
-    private readonly IStringLocalizer<ErrorMessages> _localizer = localizer;
-    
     public async Task<Result<Alert>> Handle(CreateAlertCommand command, CancellationToken cancellationToken)
     {
         var alert = new Alert(command);
@@ -31,18 +29,17 @@ public class AlertCommandService(
         catch (OperationCanceledException)
         {
             return Result<Alert>.Failure(MonitoringError.OperationCancelled,
-                _localizer[nameof(MonitoringError.OperationCancelled)]);
+                localizer[nameof(MonitoringError.OperationCancelled)]);
         }
         catch (DbUpdateException)
         {
             return Result<Alert>.Failure(MonitoringError.DatabaseError,
-                _localizer[nameof(MonitoringError.DatabaseError)]);
+                localizer[nameof(MonitoringError.DatabaseError)]);
         }
         catch (Exception)
         {
             return Result<Alert>.Failure(MonitoringError.InternalServerError,
-                _localizer[nameof(MonitoringError.InternalServerError)]);
+                localizer[nameof(MonitoringError.InternalServerError)]);
         }
     }
-    
 }
