@@ -35,4 +35,21 @@ public class SubscriptionCommandService
 
         return subscription;
     }
+    public async Task<SubscriptionEntity?> Handle(
+        CancelSubscriptionCommand command)
+    {
+        var subscription =
+            await repository.FindByIdAsync(command.Id);
+
+        if (subscription is null)
+            return null;
+
+        subscription.Cancel();
+
+        repository.Update(subscription);
+
+        await unitOfWork.CompleteAsync();
+
+        return subscription;
+    }
 }
