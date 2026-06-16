@@ -3,6 +3,7 @@ using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi;
+using MySql.Data.MySqlClient;
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.Internal.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Repositories;
@@ -106,7 +107,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
+    try
+    {
+        context.Database.Migrate();
+    }
+    catch (MySql.Data.MySqlClient.MySqlException ex) when (ex.Message.Contains("database exists"))
+    {
+        // Base ya existe, continuar normalmente
+    }
 }
 
 app.UseGlobalExceptionHandler();
