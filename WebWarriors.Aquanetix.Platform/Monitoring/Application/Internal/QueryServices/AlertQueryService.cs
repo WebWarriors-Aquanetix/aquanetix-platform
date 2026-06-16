@@ -10,9 +10,12 @@ public class AlertQueryService(IAlertRepository alertRepository) : IAlertQuerySe
     public async Task<Alert?> Handle(GetAlertByIdQuery query, CancellationToken cancellationToken)
         => await alertRepository.FindByIdAsync(query.AlertId, cancellationToken);
 
-    public async Task<IEnumerable<Alert>> Handle(GetAlertsByDeviceIdQuery query, CancellationToken cancellationToken)
-        => await alertRepository.FindByDeviceIdAsync(query.DeviceId, cancellationToken);
-    
     public async Task<IEnumerable<Alert>> Handle(GetAllAlertsQuery query, CancellationToken cancellationToken)
         => await alertRepository.ListAsync(cancellationToken);
+
+    public async Task<IEnumerable<Alert>> Handle(GetAlertsByDeviceIdQuery query, CancellationToken cancellationToken)
+        => await alertRepository.FindByDeviceIdAsync(query.DeviceId, cancellationToken);
+
+    public async Task<IEnumerable<Alert>> Handle(GetAlertsByStatusQuery query, CancellationToken cancellationToken)
+        => await alertRepository.FindByStatusAsync(query.Status, cancellationToken);
 }

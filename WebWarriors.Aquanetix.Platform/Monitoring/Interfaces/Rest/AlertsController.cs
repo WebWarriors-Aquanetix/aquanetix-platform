@@ -56,6 +56,15 @@ public class AlertsController(
         return Ok(alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity));
     }
 
+    [HttpGet("status/{status}")]
+    [SwaggerOperation(Summary = "Get alerts by status", OperationId = "GetAlertsByStatus")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Alerts found", typeof(IEnumerable<AlertResource>))]
+    public async Task<IActionResult> GetAlertsByStatus([FromRoute] string status, CancellationToken cancellationToken)
+    {
+        var alerts = await alertQueryService.Handle(new GetAlertsByStatusQuery(status), cancellationToken);
+        return Ok(alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
     [HttpPost]
     [SwaggerOperation(Summary = "Create an alert", OperationId = "CreateAlert")]
     [SwaggerResponse(StatusCodes.Status201Created, "Alert created", typeof(AlertResource))]
