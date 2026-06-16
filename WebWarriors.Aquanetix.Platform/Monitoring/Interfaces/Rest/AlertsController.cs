@@ -80,4 +80,18 @@ public class AlertsController(
                 new { alertId = created.Id },
                 AlertResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
+    [HttpPut("{alertId:int}")]
+    [SwaggerOperation(Summary = "Update an alert (resolve)", OperationId = "UpdateAlert")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Alert updated", typeof(AlertResource))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Alert not found")]
+    public async Task<IActionResult> UpdateAlert([FromRoute] int alertId,
+        [FromBody] UpdateAlertResource resource, CancellationToken cancellationToken)
+    {
+        var command = UpdateAlertCommandFromResourceAssembler.ToCommandFromResource(resource, alertId);
+        var result  = await alertCommandService.Handle(command, cancellationToken);
+        return MonitoringActionResultAssembler.ToActionResultFromUpdateAlertResult(
+            this, result, _errorLocalizer, _problemDetailsFactory,
+            updated => Ok(AlertResourceFromEntityAssembler.ToResourceFromEntity(updated)));
+    }
 }

@@ -1,6 +1,6 @@
-﻿//namespace WebWarriors.Aquanetix.Platform.Monitoring.Domain.Model.Commands;
+﻿namespace WebWarriors.Aquanetix.Platform.Monitoring.Domain.Model.Commands;
 
-/*public record UpdateAlertCommand(
+public record UpdateAlertCommand(
     int           Id,
     int           DeviceId,
     string        DeviceName,
@@ -11,4 +11,4 @@
     DateTimeOffset Timestamp,
     string        Status,
     double        Value,
-    double        Threshold);*/
+    double        Threshold);

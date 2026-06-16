@@ -1,4 +1,4 @@
-﻿/*namespace WebWarriors.Aquanetix.Platform.Monitoring.Interfaces.Rest.Resources;
+﻿namespace WebWarriors.Aquanetix.Platform.Monitoring.Interfaces.Rest.Resources;
 
 public record UpdateAlertResource(
     int    DeviceId,
@@ -10,4 +10,4 @@ public record UpdateAlertResource(
     DateTimeOffset Timestamp,
     string Status,
     double Value,
-    double Threshold);*/
+    double Threshold);
