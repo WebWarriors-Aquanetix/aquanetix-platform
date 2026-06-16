@@ -52,6 +52,15 @@ public class AlertsController(
         
         return Ok(alertResources);
     }
+    
+    [HttpGet]
+    [SwaggerOperation(Summary = "Get all alerts", OperationId = "GetAllAlerts")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Alerts retrieved", typeof(IEnumerable<AlertResource>))]
+    public async Task<IActionResult> GetAllAlerts(CancellationToken cancellationToken)
+    {
+        var alerts = await alertQueryService.Handle(new GetAllAlertsQuery(), cancellationToken);
+        return Ok(alerts.Select(AlertResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 
   
 }
