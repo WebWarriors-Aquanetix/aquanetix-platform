@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using WebWarriors.Aquanetix.Platform.Dashboard.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Model.Queries;
 using WebWarriors.Aquanetix.Platform.Dashboard.Interfaces.Rest.Resources;
@@ -12,7 +13,9 @@ namespace WebWarriors.Aquanetix.Platform.Dashboard.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Quality Analysis endpoints")]
-public class QualityAnalysisController(IQualityAnalysisQueryService qualityAnalysisQueryService)
+public class QualityAnalysisController(
+    IQualityAnalysisQueryService qualityAnalysisQueryService,
+    IQualityAnalysisCommandService qualityAnalysisCommandService)
     : ControllerBase
 {
     [HttpGet]
@@ -33,5 +36,24 @@ public class QualityAnalysisController(IQualityAnalysisQueryService qualityAnaly
         var result = await qualityAnalysisQueryService.Handle(new GetQualityAnalysisByIdQuery(id), cancellationToken);
         if (result is null) return NotFound();
         return Ok(QualityAnalysisResourceFromEntityAssembler.ToResourceFromEntity(result));
+    }
+
+    [HttpPost]
+    [SwaggerOperation(Summary = "Create quality analysis", OperationId = "CreateQualityAnalysis")]
+    [SwaggerResponse(StatusCodes.Status201Created, "Quality analysis created", typeof(QualityAnalysisResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Bad request")]
+    public async Task<IActionResult> CreateQualityAnalysis(
+        [FromBody] CreateQualityAnalysisResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = CreateQualityAnalysisCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await qualityAnalysisCommandService.Handle(command, cancellationToken);
+
+        if (!result.IsSuccess) return BadRequest(result.Error);
+
+        return CreatedAtAction(
+            nameof(GetQualityAnalysisById),
+            new { id = result.Value!.Id },
+            QualityAnalysisResourceFromEntityAssembler.ToResourceFromEntity(result.Value));
     }
 }
