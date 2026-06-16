@@ -52,4 +52,29 @@ public class DevicesController(
             return NotFound(new { message = result.Message });
         return Ok(DeviceResourceFromEntityAssembler.ToResourceFromEntity(result.Value!));
     }
+
+    [HttpGet("{deviceId:int}/thresholds")]
+    [SwaggerOperation(Summary = "Get thresholds by device id", OperationId = "GetThresholdsByDeviceId")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Thresholds retrieved", typeof(IEnumerable<ThresholdResource>))]
+    public async Task<IActionResult> GetThresholdsByDeviceId([FromRoute] int deviceId, CancellationToken cancellationToken)
+    {
+        var thresholds = await deviceQueryService.Handle(new GetThresholdsByDeviceIdQuery(deviceId), cancellationToken);
+        return Ok(thresholds.Select(ThresholdResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
+    [HttpPost("{deviceId:int}/thresholds")]
+    [SwaggerOperation(Summary = "Create threshold for device", OperationId = "CreateThreshold")]
+    [SwaggerResponse(StatusCodes.Status201Created, "Threshold created", typeof(ThresholdResource))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Device not found")]
+    public async Task<IActionResult> CreateThreshold([FromRoute] int deviceId,
+        [FromBody] CreateThresholdResource resource, CancellationToken cancellationToken)
+    {
+        var command = CreateThresholdCommandFromResourceAssembler.ToCommandFromResource(resource, deviceId);
+        var result  = await deviceCommandService.Handle(command, cancellationToken);
+        if (!result.IsSuccess)
+            return NotFound(new { message = result.Message });
+        return CreatedAtAction(nameof(GetThresholdsByDeviceId),
+            new { deviceId },
+            ThresholdResourceFromEntityAssembler.ToResourceFromEntity(result.Value!));
+    }
 }
