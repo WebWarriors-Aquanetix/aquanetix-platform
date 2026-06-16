@@ -115,7 +115,8 @@ namespace WebWarriors.Aquanetix.Platform.Migrations
                         .HasColumnName("alert_level");
 
                     b.Property<int?>("DeviceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("device_id_fk");
 
                     b.Property<double>("MaxValue")
                         .HasColumnType("double")
@@ -268,7 +269,8 @@ namespace WebWarriors.Aquanetix.Platform.Migrations
                 {
                     b.HasOne("WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Aggregates.Device", null)
                         .WithMany("Thresholds")
-                        .HasForeignKey("DeviceId");
+                        .HasForeignKey("DeviceId")
+                        .HasConstraintName("FK_threshold_device");
                 });
 
             modelBuilder.Entity("WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Aggregates.Device", b =>
