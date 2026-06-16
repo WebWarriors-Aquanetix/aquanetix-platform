@@ -3,10 +3,15 @@ using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi;
+using MySql.Data.MySqlClient;
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.Internal.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Dashboard.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Devices.Application.Internal.QueryServices;
+using WebWarriors.Aquanetix.Platform.Devices.Application.QueryServices;
+using WebWarriors.Aquanetix.Platform.Devices.Domain.Repositories;
+using WebWarriors.Aquanetix.Platform.Devices.Infrastructure.Persistence.EFC.Repositories;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.QueryServices;
@@ -90,6 +95,10 @@ builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
 builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 
+// Devices
+builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
+builder.Services.AddScoped<IDeviceQueryService, DeviceQueryService>();
+
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);
 
@@ -98,9 +107,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    
-    context.Database.EnsureDeleted();
-    context.Database.Migrate();
+    try
+    {
+        context.Database.Migrate();
+    }
+    catch (MySql.Data.MySqlClient.MySqlException ex) when (ex.Message.Contains("database exists"))
+    {
+        // Base ya existe, continuar normalmente
+    }
 }
 
 app.UseGlobalExceptionHandler();
