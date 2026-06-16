@@ -21,4 +21,8 @@ public class Subscription
         Plan = plan;
         Status = status;
     }
+    public void Cancel()
+    {
+        Status = "Cancelled";
+    }
 }
