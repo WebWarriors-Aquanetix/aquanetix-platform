@@ -21,7 +21,7 @@ public class SubscriptionCommandService
         this.unitOfWork = unitOfWork;
     }
 
-    public async Task<SubscriptionEntity?> Handle(
+    public async  Task<WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Aggregates.Subscription?> Handle(
         CreateSubscriptionCommand command)
     {
         var subscription = new SubscriptionEntity(
