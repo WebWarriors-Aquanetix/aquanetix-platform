@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Queries;
 using WebWarriors.Aquanetix.Platform.Subscription.Domain.Services;
+using WebWarriors.Aquanetix.Platform.Subscription.Interfaces.REST.Resources;
 using WebWarriors.Aquanetix.Platform.Subscription.Interfaces.REST.Transform;
 
 namespace WebWarriors.Aquanetix.Platform.Subscription.Interfaces.REST;
@@ -10,11 +11,14 @@ namespace WebWarriors.Aquanetix.Platform.Subscription.Interfaces.REST;
 public class SubscriptionsController : ControllerBase
 {
     private readonly ISubscriptionQueryService queryService;
+    private readonly ISubscriptionCommandService commandService;
 
     public SubscriptionsController(
-        ISubscriptionQueryService queryService)
+        ISubscriptionQueryService queryService,
+        ISubscriptionCommandService commandService)
     {
         this.queryService = queryService;
+        this.commandService = commandService;
     }
 
     [HttpGet("{id}")]
@@ -33,5 +37,26 @@ public class SubscriptionsController : ControllerBase
                 .ToResource(subscription);
 
         return Ok(resource);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateSubscription(
+        CreateSubscriptionResource resource)
+    {
+        var command =
+            CreateSubscriptionCommandFromResourceAssembler
+                .ToCommand(resource);
+
+        var subscription =
+            await commandService.Handle(command);
+
+        if (subscription is null)
+            return BadRequest();
+
+        var subscriptionResource =
+            SubscriptionResourceFromEntityAssembler
+                .ToResource(subscription);
+
+        return Ok(subscriptionResource);
     }
 }
