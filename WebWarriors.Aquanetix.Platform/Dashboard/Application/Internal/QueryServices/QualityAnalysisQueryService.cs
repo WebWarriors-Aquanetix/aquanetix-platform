@@ -11,4 +11,8 @@ public class QualityAnalysisQueryService(IQualityAnalysisRepository qualityAnaly
     public async Task<QualityAnalysis?> Handle(GetQualityAnalysisByIdQuery query,
         CancellationToken cancellationToken)
         => await qualityAnalysisRepository.FindByIdAsync(query.Id, cancellationToken);
+
+    public async Task<IEnumerable<QualityAnalysis>> Handle(GetAllQualityAnalysesQuery query,
+        CancellationToken cancellationToken)
+        => await qualityAnalysisRepository.ListAsync(cancellationToken);
 }
