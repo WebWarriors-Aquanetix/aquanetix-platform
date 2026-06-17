@@ -53,6 +53,21 @@ public class DevicesController(
         return Ok(DeviceResourceFromEntityAssembler.ToResourceFromEntity(result.Value!));
     }
 
+    [HttpPost]
+    [SwaggerOperation(Summary = "Create a new device", OperationId = "CreateDevice")]
+    [SwaggerResponse(StatusCodes.Status201Created, "Device created", typeof(DeviceResource))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid device data")]
+    public async Task<IActionResult> CreateDevice(
+        [FromBody] CreateDeviceResource resource, CancellationToken cancellationToken)
+    {
+        var command = CreateDeviceCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result  = await deviceCommandService.Handle(command, cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(new { message = result.Message });
+        var created = DeviceResourceFromEntityAssembler.ToResourceFromEntity(result.Value!);
+        return CreatedAtAction(nameof(GetDeviceById), new { deviceId = created.Id }, created);
+    }
+
     [HttpGet("{deviceId:int}/thresholds")]
     [SwaggerOperation(Summary = "Get thresholds by device id", OperationId = "GetThresholdsByDeviceId")]
     [SwaggerResponse(StatusCodes.Status200OK, "Thresholds retrieved", typeof(IEnumerable<ThresholdResource>))]

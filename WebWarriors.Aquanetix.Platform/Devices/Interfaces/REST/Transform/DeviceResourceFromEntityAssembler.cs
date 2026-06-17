@@ -13,7 +13,11 @@ public static class DeviceResourceFromEntityAssembler
             entity.SerialNumber,
             entity.DeviceType.ToString(),
             entity.CurrentStatus.ToString(),
-            entity.LastTelemetrySync
+            entity.LastTelemetrySync,
+            entity.Name,
+            entity.Location,
+            entity.Unit,
+            entity.CurrentValue
         );
     }
 }

@@ -7,5 +7,9 @@ public record CreateDeviceCommand(
     string SerialNumber,
     DeviceType DeviceType,
     DeviceStatus CurrentStatus,
-    DateTimeOffset? LastTelemetrySync
-    );
+    DateTimeOffset? LastTelemetrySync,
+    string? Name,
+    string? Location,
+    string? Unit,
+    double? CurrentValue
+);
