@@ -52,4 +52,21 @@ public class SubscriptionCommandService
 
         return subscription;
     }
+    public async Task<SubscriptionEntity?> Handle(
+        RenewSubscriptionCommand command)
+    {
+        var subscription =
+            await repository.FindByIdAsync(command.Id);
+
+        if (subscription is null)
+            return null;
+
+        subscription.Renew();
+
+        repository.Update(subscription);
+
+        await unitOfWork.CompleteAsync();
+
+        return subscription;
+    }
 }

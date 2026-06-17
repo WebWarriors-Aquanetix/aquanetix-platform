@@ -25,4 +25,8 @@ public class Subscription
     {
         Status = "Cancelled";
     }
+    public void Renew()
+    {
+        Status = "Active";
+    }
 }

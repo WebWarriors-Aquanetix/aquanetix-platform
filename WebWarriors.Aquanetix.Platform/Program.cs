@@ -122,7 +122,7 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try
     {
-        context.Database.Migrate();
+        //context.Database.Migrate();
     }
     catch (MySql.Data.MySqlClient.MySqlException ex) when (ex.Message.Contains("database exists"))
     {

@@ -76,4 +76,22 @@ public class SubscriptionsController : ControllerBase
 
         return Ok(resource);
     }
+    [HttpPut("{id}/renew")]
+    public async Task<IActionResult> RenewSubscription(int id)
+    {
+        var command =
+            new RenewSubscriptionCommand(id);
+
+        var subscription =
+            await commandService.Handle(command);
+
+        if (subscription is null)
+            return NotFound();
+
+        var resource =
+            SubscriptionResourceFromEntityAssembler
+                .ToResource(subscription);
+
+        return Ok(resource);
+    }
 }
