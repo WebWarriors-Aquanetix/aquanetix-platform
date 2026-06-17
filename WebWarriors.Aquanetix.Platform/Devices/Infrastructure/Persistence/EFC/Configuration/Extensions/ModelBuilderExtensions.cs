@@ -43,5 +43,14 @@ public static class ModelBuilderExtensions
             .HasColumnName("unit").IsRequired().HasMaxLength(20);
         builder.Entity<ThresholdConfiguration>().Property(t => t.AlertLevel)
             .HasColumnName("alert_level").IsRequired();
+        builder.Entity<Device>()
+            .HasMany(d => d.Thresholds)
+            .WithOne()
+            .HasForeignKey("DeviceId")
+            .HasConstraintName("FK_threshold_device");
+
+        builder.Entity<ThresholdConfiguration>()
+            .Property<int?>("DeviceId")
+            .HasColumnName("device_id_fk");
     }
 }
