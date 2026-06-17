@@ -1,5 +1,4 @@
 using WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Commands;
-
 namespace WebWarriors.Aquanetix.Platform.Subscription.Domain.Services;
 
 public interface ISubscriptionCommandService
@@ -8,4 +7,6 @@ public interface ISubscriptionCommandService
         Handle(CreateSubscriptionCommand command);
     Task<WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Aggregates.Subscription?>
         Handle(CancelSubscriptionCommand command);
+    Task<WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Aggregates.Subscription?>
+        Handle(RenewSubscriptionCommand command);
 }
