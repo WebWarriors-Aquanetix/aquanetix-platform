@@ -4,12 +4,15 @@ using WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST.Resources;
 
 namespace WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST.Transform;
 
-public static class UpdateDeviceCommandFromResourceAssembler
+public static class CreateDeviceCommandFromResourceAssembler
 {
-    public static UpdateDeviceCommand ToCommandFromResource(UpdateDeviceResource resource, int deviceId) =>
-        new(deviceId,
-            Enum.Parse<DeviceStatus>(resource.CurrentStatus, ignoreCase: true),
-            resource.LastTelemetrySync,
+    public static CreateDeviceCommand ToCommandFromResource(CreateDeviceResource resource) =>
+        new(
+            resource.OwnerId,
+            resource.SerialNumber,
+            Enum.Parse<DeviceType>(resource.DeviceType, ignoreCase: true),
+            DeviceStatus.Normal,
+            DateTimeOffset.UtcNow,
             resource.Name,
             resource.Location,
             resource.Unit,

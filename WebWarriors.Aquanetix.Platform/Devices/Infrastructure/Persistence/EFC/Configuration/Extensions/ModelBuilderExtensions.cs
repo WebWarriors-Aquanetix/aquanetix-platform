@@ -23,6 +23,14 @@ public static class ModelBuilderExtensions
             .HasColumnName("current_status").IsRequired();
         builder.Entity<Device>().Property(d => d.LastTelemetrySync)
             .HasColumnName("last_telemetry_sync").IsRequired();
+        builder.Entity<Device>().Property(d => d.Name)
+            .HasColumnName("name").HasMaxLength(120).HasDefaultValue("");
+        builder.Entity<Device>().Property(d => d.Location)
+            .HasColumnName("location").HasMaxLength(150).HasDefaultValue("");
+        builder.Entity<Device>().Property(d => d.Unit)
+            .HasColumnName("unit").HasMaxLength(20).HasDefaultValue("");
+        builder.Entity<Device>().Property(d => d.CurrentValue)
+            .HasColumnName("current_value").HasDefaultValue(0d);
         builder.Entity<Device>().Property(d => d.CreatedAt)
             .HasColumnName("created_at");
         builder.Entity<Device>().Property(d => d.UpdatedAt)

@@ -20,7 +20,14 @@ public class DeviceCommandService(
 {
     public async Task<Result<Device>> Handle(CreateDeviceCommand command, CancellationToken cancellationToken)
     {
-        var device = new Device(command.OwnerId, command.SerialNumber, command.DeviceType);
+        var device = new Device(
+            command.OwnerId,
+            command.SerialNumber,
+            command.DeviceType,
+            command.Name ?? string.Empty,
+            command.Location ?? string.Empty,
+            command.Unit ?? string.Empty,
+            command.CurrentValue ?? 0d);
         try
         {
             await deviceRepository.AddAsync(device, cancellationToken);
