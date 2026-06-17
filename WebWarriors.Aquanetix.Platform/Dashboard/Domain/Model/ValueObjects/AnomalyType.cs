@@ -2,7 +2,7 @@ namespace WebWarriors.Aquanetix.Platform.Dashboard.Domain.Model.ValueObjects;
 
 public enum AnomalyType
 {
-    Ph,
+    PH,
     Turbidity,
     Pressure,
     Level,
