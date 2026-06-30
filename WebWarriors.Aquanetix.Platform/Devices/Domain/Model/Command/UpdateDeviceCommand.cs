@@ -6,7 +6,8 @@ public record UpdateDeviceCommand(
     int            Id,
     DeviceStatus   CurrentStatus,
     DateTimeOffset LastTelemetrySync,
-    string?        Name         = null,
-    string?        Location     = null,
-    string?        Unit         = null,
-    double?        CurrentValue = null);
+    string?        Name          = null,
+    string?        Location      = null,
+    string?        Unit          = null,
+    double?        CurrentValue  = null,
+    int?           DestinationId = null);

@@ -77,4 +77,13 @@
     <value>An unexpected internal error occurred in Dashboard.</value>
   </data>
 
+  <data name="DestinationNotFound" xml:space="preserve">
+    <value>Destination not found.</value>
+  </data>
+  <data name="DestinationNameAlreadyExists" xml:space="preserve">
+    <value>A destination with that name already exists.</value>
+  </data>
+  <data name="DestinationInUse" xml:space="preserve">
+    <value>The destination is in use by a water batch or a device and cannot be deleted.</value>
+  </data>
 </root>

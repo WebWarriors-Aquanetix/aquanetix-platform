@@ -9,5 +9,8 @@ public enum ServiceDesignError
     DestinationSectorNotFound,
     OperationCancelled,
     DatabaseError,
-    InternalServerError
+    InternalServerError,
+    DestinationNotFound,
+    DestinationNameAlreadyExists,
+    DestinationInUse
 }
