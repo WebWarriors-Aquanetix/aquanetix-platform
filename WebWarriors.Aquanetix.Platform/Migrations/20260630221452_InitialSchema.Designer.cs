@@ -11,8 +11,8 @@ using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.Confi
 namespace WebWarriors.Aquanetix.Platform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260617203006_AddDevicePresentationFields")]
-    partial class AddDevicePresentationFields
+    [Migration("20260630221452_InitialSchema")]
+    partial class InitialSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,10 @@ namespace WebWarriors.Aquanetix.Platform.Migrations
                         .HasColumnType("double")
                         .HasDefaultValue(0.0)
                         .HasColumnName("current_value");
+
+                    b.Property<int?>("DestinationId")
+                        .HasColumnType("int")
+                        .HasColumnName("destination_id");
 
                     b.Property<int>("DeviceType")
                         .HasColumnType("int")
@@ -247,6 +251,47 @@ namespace WebWarriors.Aquanetix.Platform.Migrations
                         .HasName("p_k_alerts");
 
                     b.ToTable("alerts", (string)null);
+                });
+
+            modelBuilder.Entity("WebWarriors.Aquanetix.Platform.ServiceDesign.Domain.Model.Aggregates.Destination", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("address");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("destinations", (string)null);
                 });
 
             modelBuilder.Entity("WebWarriors.Aquanetix.Platform.ServiceDesign.Domain.Model.Aggregates.WaterBatch", b =>

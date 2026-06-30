@@ -60,5 +60,9 @@ public static class ModelBuilderExtensions
         builder.Entity<ThresholdConfiguration>()
             .Property<int?>("DeviceId")
             .HasColumnName("device_id_fk");
+        
+        builder.Entity<Device>().Property(d => d.DestinationId)
+            .HasColumnName("destination_id");
+
     }
 }

@@ -20,6 +20,10 @@ public class Device : IAuditableEntity
     public string Unit { get; private set; } = string.Empty;
     public double CurrentValue { get; private set; }
 
+    /// <summary>FK to a ServiceDesign Destination (the site where the device is installed).
+    /// Nullable until Feature 3 makes it mandatory and wires the UI.</summary>
+    public int? DestinationId { get; private set; }
+
     public ICollection<ThresholdConfiguration> Thresholds { get; private set; }
         = new List<ThresholdConfiguration>();
 
@@ -81,5 +85,6 @@ public class Device : IAuditableEntity
         if (command.Location is not null)     Location = command.Location;
         if (command.Unit is not null)         Unit = command.Unit;
         if (command.CurrentValue is not null) CurrentValue = command.CurrentValue.Value;
+        if (command.DestinationId is not null) DestinationId = command.DestinationId;
     }
 }
