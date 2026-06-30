@@ -15,12 +15,14 @@ using WebWarriors.Aquanetix.Platform.Dashboard.Application.Internal.QueryService
 using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Dashboard.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Devices.Application.Acl;
 using WebWarriors.Aquanetix.Platform.Devices.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.Devices.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.Devices.Application.Internal.QueryServices;
 using WebWarriors.Aquanetix.Platform.Devices.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Devices.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Devices.Interfaces.Acl;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.QueryServices;
@@ -33,6 +35,7 @@ using WebWarriors.Aquanetix.Platform.Monitoring.Application.Internal.QueryServic
 using WebWarriors.Aquanetix.Platform.Monitoring.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Monitoring.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Monitoring.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Acl;
 using WebWarriors.Aquanetix.Platform.Shared.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Interfaces.ASP.Configuration;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
@@ -117,6 +120,15 @@ builder.Services.AddCortexMediator([typeof(Program)]);
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+
+// ServiceDesign – Destination
+builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
+builder.Services.AddScoped<IDestinationQueryService, DestinationQueryService>();
+builder.Services.AddScoped<IDestinationCommandService, DestinationCommandService>();
+builder.Services.AddScoped<IExternalDevicesService, ExternalDevicesService>(); 
+
+// Devices – ACL outbound facade
+builder.Services.AddScoped<IDevicesContextFacade, DevicesContextFacade>();
 
 var app = builder.Build();
 

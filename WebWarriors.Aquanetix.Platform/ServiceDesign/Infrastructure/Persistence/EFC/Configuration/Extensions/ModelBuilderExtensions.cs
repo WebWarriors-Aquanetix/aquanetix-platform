@@ -27,5 +27,21 @@ public static class ModelBuilderExtensions
             .HasColumnName("created_at");
         builder.Entity<WaterBatch>().Property(w => w.UpdatedAt)
             .HasColumnName("updated_at");
+        builder.Entity<Destination>().ToTable("destinations");
+        builder.Entity<Destination>().HasKey(d => d.Id);
+        builder.Entity<Destination>().Property(d => d.Id)
+            .HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Destination>().Property(d => d.Name)
+            .HasColumnName("name").IsRequired().HasMaxLength(120);
+        builder.Entity<Destination>().HasIndex(d => d.Name).IsUnique();
+        builder.Entity<Destination>().Property(d => d.Address)
+            .HasColumnName("address").HasMaxLength(250);
+        builder.Entity<Destination>().Property(d => d.Description)
+            .HasColumnName("description").HasMaxLength(500);
+        builder.Entity<Destination>().Property(d => d.CreatedAt)
+            .HasColumnName("created_at");
+        builder.Entity<Destination>().Property(d => d.UpdatedAt)
+            .HasColumnName("updated_at");
+
     }
 }

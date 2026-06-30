@@ -77,4 +77,13 @@
     <value>Ocurrió un error interno inesperado en Dashboard.</value>
   </data>
 
+  <data name="DestinationNotFound" xml:space="preserve">
+    <value>Lugar de destino no encontrado.</value>
+  </data>
+  <data name="DestinationNameAlreadyExists" xml:space="preserve">
+    <value>Ya existe un lugar de destino con ese nombre.</value>
+  </data>
+  <data name="DestinationInUse" xml:space="preserve">
+    <value>El lugar de destino está en uso por un lote de agua o un dispositivo y no se puede eliminar.</value>
+  </data>
 </root>
