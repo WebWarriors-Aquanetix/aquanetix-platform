@@ -1,6 +1,9 @@
-﻿namespace WebWarriors.Aquanetix.Platform.Iam.Domain.Repositories;
+using WebWarriors.Aquanetix.Platform.Iam.Domain.Model.Aggregates;
+using WebWarriors.Aquanetix.Platform.Shared.Domain.Repositories;
 
-public interface IUserRepository
+namespace WebWarriors.Aquanetix.Platform.Iam.Domain.Repositories;
+
+public interface IUserRepository : IBaseRepository<User>
 {
-    
+    Task<User?> FindByEmailAsync(string email, CancellationToken cancellationToken);
 }
