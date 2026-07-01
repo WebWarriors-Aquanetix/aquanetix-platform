@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using WebWarriors.Aquanetix.Platform.Devices.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.Devices.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Queries;
+using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Command;
 using WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST.Resources;
 using WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST.Transform;
 
@@ -91,5 +92,17 @@ public class DevicesController(
         return CreatedAtAction(nameof(GetThresholdsByDeviceId),
             new { deviceId },
             ThresholdResourceFromEntityAssembler.ToResourceFromEntity(result.Value!));
+    }
+
+    [HttpDelete("{deviceId:int}")]
+    [SwaggerOperation(Summary = "Delete a device and its alerts and thresholds", OperationId = "DeleteDevice")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, "Device deleted")]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Device not found")]
+    public async Task<IActionResult> DeleteDevice([FromRoute] int deviceId, CancellationToken cancellationToken)
+    {
+        var result = await deviceCommandService.Handle(new DeleteDeviceCommand(deviceId), cancellationToken);
+        if (!result.IsSuccess)
+            return NotFound(new { message = result.Message });
+        return NoContent();
     }
 }

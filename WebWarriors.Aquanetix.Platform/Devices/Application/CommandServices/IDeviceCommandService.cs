@@ -10,4 +10,5 @@ public interface IDeviceCommandService
     Task<Result<Device>> Handle(CreateDeviceCommand command, CancellationToken cancellationToken);
     Task<Result<Device>> Handle(UpdateDeviceCommand command, CancellationToken cancellationToken);
     Task<Result<ThresholdConfiguration>> Handle(CreateThresholdCommand command, CancellationToken cancellationToken);
+    Task<Result<bool>> Handle(DeleteDeviceCommand command, CancellationToken cancellationToken);
 }
