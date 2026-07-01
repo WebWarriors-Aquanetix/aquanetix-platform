@@ -132,8 +132,11 @@ public class DeviceCommandService(
             // Delete them through the ACL, never touching Monitoring tables directly.
             await externalMonitoringService.DeleteAlertsForDevice(command.Id, cancellationToken);
 
-            // Cascade 2: thresholds live inside Devices and are removed by EF Core
-            // cascade delete (FK_threshold_device) when the device is removed.
+            // Cascade 2: thresholds live inside Devices. The DB foreign key
+            // FK_threshold_device is RESTRICT (not CASCADE), so we remove them
+            // explicitly before deleting the device, otherwise MySQL rejects it.
+            await deviceRepository.RemoveThresholdsByDeviceId(command.Id, cancellationToken);
+
             deviceRepository.Remove(device);
             await unitOfWork.CompleteAsync(cancellationToken);
             return Result<bool>.Success(true);
