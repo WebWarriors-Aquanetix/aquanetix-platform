@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using WebWarriors.Aquanetix.Platform.Dashboard.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.Devices.Infrastructure.Persistence.EFC.Configuration.Extensions;
+using WebWarriors.Aquanetix.Platform.Iam.Domain.Model.Aggregates;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.Monitoring.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Infrastructure.Persistence.EFC.Configuration.Extensions;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.Configuration.Extensions;
@@ -13,6 +15,7 @@ namespace WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.C
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Alert> Alerts { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public DbSet<
             WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Aggregates.Subscription>
@@ -32,6 +35,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.ApplyMonitoringConfiguration();
         builder.ApplyDashboardConfiguration();
         builder.ApplyDevicesConfiguration();
+        builder.ApplyIamConfiguration();
 
         builder.ApplySubscriptionConfiguration();
     }

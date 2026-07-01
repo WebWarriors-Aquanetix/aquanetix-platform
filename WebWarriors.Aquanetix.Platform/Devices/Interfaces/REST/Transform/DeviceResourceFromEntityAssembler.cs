@@ -17,7 +17,8 @@ public static class DeviceResourceFromEntityAssembler
             entity.Name,
             entity.Location,
             entity.Unit,
-            entity.CurrentValue
+            entity.CurrentValue,
+            entity.DestinationId
         );
     }
 }

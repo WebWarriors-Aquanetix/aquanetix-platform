@@ -7,5 +7,6 @@ public record CreateDeviceResource(
     string Name,
     string Location,
     string Unit,
-    double CurrentValue
+    double CurrentValue,
+    int?   DestinationId
 );
