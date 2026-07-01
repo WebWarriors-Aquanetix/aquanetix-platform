@@ -29,6 +29,7 @@ using WebWarriors.Aquanetix.Platform.Iam.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.Iam.Domain.Model.Aggregates;
 using WebWarriors.Aquanetix.Platform.Iam.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Monitoring.Application.Acl;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.QueryServices;
@@ -41,6 +42,7 @@ using WebWarriors.Aquanetix.Platform.Monitoring.Application.Internal.QueryServic
 using WebWarriors.Aquanetix.Platform.Monitoring.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Monitoring.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Monitoring.Infrastructure.Persistence.EFC.Repositories;
+using WebWarriors.Aquanetix.Platform.Monitoring.Interfaces.Acl;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Acl;
 using WebWarriors.Aquanetix.Platform.Shared.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Interfaces.ASP.Configuration;
@@ -140,6 +142,12 @@ builder.Services.AddScoped<IExternalDevicesService, ExternalDevicesService>();
 
 // Devices – ACL outbound facade
 builder.Services.AddScoped<IDevicesContextFacade, DevicesContextFacade>();
+
+// Monitoring – ACL outbound facade (para cascada de alertas)
+builder.Services.AddScoped<IMonitoringContextFacade, MonitoringContextFacade>();
+
+// Devices – ACL consumer sobre Monitoring
+builder.Services.AddScoped<IExternalMonitoringService, ExternalMonitoringService>();
 
 var app = builder.Build();
 

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using WebWarriors.Aquanetix.Platform.Devices.Application.CommandServices;
+using WebWarriors.Aquanetix.Platform.Devices.Application.Acl;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Aggregates;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Command;
@@ -14,6 +15,7 @@ namespace WebWarriors.Aquanetix.Platform.Devices.Application.Internal.CommandSer
 
 public class DeviceCommandService(
     IDeviceRepository deviceRepository,
+    IExternalMonitoringService externalMonitoringService,
     IUnitOfWork unitOfWork,
     IStringLocalizer<ErrorMessages> localizer)
     : IDeviceCommandService
@@ -27,7 +29,8 @@ public class DeviceCommandService(
             command.Name ?? string.Empty,
             command.Location ?? string.Empty,
             command.Unit ?? string.Empty,
-            command.CurrentValue ?? 0d);
+            command.CurrentValue ?? 0d,
+            command.DestinationId);
         try
         {
             await deviceRepository.AddAsync(device, cancellationToken);
@@ -113,6 +116,41 @@ public class DeviceCommandService(
         catch (Exception)
         {
             return Result<ThresholdConfiguration>.Failure(DevicesError.InvalidDeviceData,
+                localizer[nameof(DevicesError.InvalidDeviceData)]);
+        }
+    }
+
+    public async Task<Result<bool>> Handle(DeleteDeviceCommand command, CancellationToken cancellationToken)
+    {
+        var device = await deviceRepository.FindByIdAsync(command.Id, cancellationToken);
+        if (device is null)
+            return Result<bool>.Failure(DevicesError.DeviceNotFound,
+                localizer[nameof(DevicesError.DeviceNotFound)]);
+        try
+        {
+            // Cascade 1: alerts live in the Monitoring bounded context.
+            // Delete them through the ACL, never touching Monitoring tables directly.
+            await externalMonitoringService.DeleteAlertsForDevice(command.Id, cancellationToken);
+
+            // Cascade 2: thresholds live inside Devices and are removed by EF Core
+            // cascade delete (FK_threshold_device) when the device is removed.
+            deviceRepository.Remove(device);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<bool>.Success(true);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<bool>.Failure(DevicesError.OperationCancelled,
+                localizer[nameof(DevicesError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<bool>.Failure(DevicesError.InvalidDeviceData,
+                localizer[nameof(DevicesError.InvalidDeviceData)]);
+        }
+        catch (Exception)
+        {
+            return Result<bool>.Failure(DevicesError.InvalidDeviceData,
                 localizer[nameof(DevicesError.InvalidDeviceData)]);
         }
     }
