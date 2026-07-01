@@ -16,5 +16,6 @@ public static class CreateDeviceCommandFromResourceAssembler
             resource.Name,
             resource.Location,
             resource.Unit,
-            resource.CurrentValue);
+            resource.CurrentValue,
+            resource.DestinationId);
 }

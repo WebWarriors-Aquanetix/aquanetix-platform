@@ -40,13 +40,15 @@ public class Device : IAuditableEntity
     }
 
     public Device(int ownerId, string serialNumber, DeviceType deviceType,
-        string name, string location, string unit, double currentValue)
+        string name, string location, string unit, double currentValue,
+        int? destinationId = null)
         : this(ownerId, serialNumber, deviceType)
     {
         Name = name ?? string.Empty;
         Location = location ?? string.Empty;
         Unit = unit ?? string.Empty;
         CurrentValue = currentValue;
+        DestinationId = destinationId;
     }
 
     // ctor sin parámetros para materialización de EF Core
