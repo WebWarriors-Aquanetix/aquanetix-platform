@@ -26,6 +26,12 @@
 
     <ItemGroup>
         <Folder Include="Controllers\" />
+        <Folder Include="Iam\Domain\Model\Aggregates\" />
+        <Folder Include="Iam\Domain\Model\Commands\" />
+        <Folder Include="Iam\Domain\Model\Errors\Resources\" />
+        <Folder Include="Iam\Domain\Model\Queries\" />
+        <Folder Include="Iam\Interfaces\Rest\Resources\" />
+        <Folder Include="Iam\Interfaces\Rest\Transform\" />
         <Folder Include="Shared\Domain\Model\Aggregates\" />
         <Folder Include="Shared\Infrastructure\Persistence\EFC\Interceptors\" />
         <Folder Include="Subscription\Domain\Model\Exceptions\" />

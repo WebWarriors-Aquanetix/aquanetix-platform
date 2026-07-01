@@ -5,6 +5,7 @@ using WebWarriors.Aquanetix.Platform.Subscription.Domain.Services;
 using WebWarriors.Aquanetix.Platform.Subscription.Infrastructure.Persistence.EFC.Repositories;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi;
@@ -23,6 +24,11 @@ using WebWarriors.Aquanetix.Platform.Devices.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Repositories;
 using WebWarriors.Aquanetix.Platform.Devices.Infrastructure.Persistence.EFC.Repositories;
 using WebWarriors.Aquanetix.Platform.Devices.Interfaces.Acl;
+using WebWarriors.Aquanetix.Platform.Iam.Application.CommandServices;
+using WebWarriors.Aquanetix.Platform.Iam.Application.Internal.CommandServices;
+using WebWarriors.Aquanetix.Platform.Iam.Domain.Model.Aggregates;
+using WebWarriors.Aquanetix.Platform.Iam.Domain.Repositories;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Persistence.EFC.Repositories;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.Internal.QueryServices;
@@ -112,6 +118,11 @@ builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
 builder.Services.AddScoped<IDeviceQueryService, DeviceQueryService>();
 builder.Services.AddScoped<IDeviceCommandService, DeviceCommandService>();
+
+// IAM
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ISignInCommandService, SignInCommandService>();
+builder.Services.AddScoped<PasswordHasher<User>>();
 
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);
