@@ -7,17 +7,21 @@ using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.Repos
 
 namespace WebWarriors.Aquanetix.Platform.Devices.Infrastructure.Persistence.EFC.Repositories;
 
-// CORRECCIÓN: Se añade 'AppDbContext' como segundo argumento genérico
 public class DeviceRepository : BaseRepository<Device>, IDeviceRepository
 {
-    // El constructor pasa el contexto a la clase base correctamente
     public DeviceRepository(AppDbContext context) : base(context)
     {
     }
 
-    public async Task<Device?> FindByIdAsync(int id)
+    /// <inheritdoc />
+    public async Task RemoveThresholdsByDeviceId(int deviceId, CancellationToken cancellationToken)
     {
-        // Al usar la clase base genérica correcta, ya puedes usar 'Context' sin problemas
-        return await Context.Set<Device>().FindAsync(id);
+        // ThresholdConfiguration.SensorId holds the owning device's id.
+        var thresholds = await Context.Set<ThresholdConfiguration>()
+            .Where(t => t.SensorId == deviceId)
+            .ToListAsync(cancellationToken);
+
+        if (thresholds.Count > 0)
+            Context.Set<ThresholdConfiguration>().RemoveRange(thresholds);
     }
 }

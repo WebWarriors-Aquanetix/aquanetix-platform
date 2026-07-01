@@ -5,6 +5,5 @@ namespace WebWarriors.Aquanetix.Platform.Devices.Domain.Repositories;
 
 public interface IDeviceRepository : IBaseRepository<Device>
 {
-    // FindByIdAsync y ListAsync ya se heredan de IBaseRepository<Device>.
-    // Solo agregarías métodos específicos si el agregado Device los requiriera.
+    Task RemoveThresholdsByDeviceId(int deviceId, CancellationToken cancellationToken);
 }
