@@ -29,4 +29,10 @@ public class Subscription
     {
         Status = "Active";
     }
+
+    /// <summary>Changes the subscription's plan. Domain operation, like Cancel/Renew.</summary>
+    public void ChangePlan(string newPlan)
+    {
+        Plan = newPlan;
+    }
 }
