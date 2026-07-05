@@ -15,7 +15,7 @@ namespace WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Device endpoints")]
-[AllowAnonymous]
+[Authorize]
 public class DevicesController(
     IDeviceQueryService deviceQueryService,
     IDeviceCommandService deviceCommandService)

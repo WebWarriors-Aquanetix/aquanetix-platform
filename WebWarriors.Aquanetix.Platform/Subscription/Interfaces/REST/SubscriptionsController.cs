@@ -11,7 +11,7 @@ namespace WebWarriors.Aquanetix.Platform.Subscription.Interfaces.REST;
 
 [ApiController]
 [Route("api/v1/subscriptions")]
-[AllowAnonymous]     
+[Authorize]
 public class SubscriptionsController : ControllerBase
 {
     private readonly ISubscriptionQueryService queryService;
@@ -39,6 +39,14 @@ public class SubscriptionsController : ControllerBase
         var subscriptions = await queryService.Handle(new GetAllSubscriptionsQuery());
         var resources = subscriptions.Select(SubscriptionResourceFromEntityAssembler.ToResource);
         return Ok(resources);
+    }
+
+    [HttpGet("by-user/{userId}")]
+    public async Task<IActionResult> GetByUserId(int userId)
+    {
+        var subscription = await queryService.Handle(new GetSubscriptionByUserIdQuery(userId));
+        if (subscription is null) return NotFound();
+        return Ok(SubscriptionResourceFromEntityAssembler.ToResource(subscription));
     }
 
     [HttpGet("{id}")]

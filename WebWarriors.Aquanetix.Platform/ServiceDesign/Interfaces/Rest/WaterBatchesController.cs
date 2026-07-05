@@ -18,7 +18,7 @@ namespace WebWarriors.Aquanetix.Platform.ServiceDesign.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Water Batch endpoints")]
-[AllowAnonymous]     
+[Authorize]     
 public class WaterBatchesController(
     IWaterBatchQueryService waterBatchQueryService,
     IWaterBatchCommandService waterBatchCommandService,

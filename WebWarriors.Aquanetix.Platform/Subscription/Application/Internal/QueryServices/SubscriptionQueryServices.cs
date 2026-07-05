@@ -23,4 +23,9 @@ public class SubscriptionQueryService : ISubscriptionQueryService
     {
         return await repository.ListAsync();
     }
+
+    public async Task<SubscriptionEntity?> Handle(GetSubscriptionByUserIdQuery query)
+    {
+        return await repository.FindByUserIdAsync(query.UserId);
+    }
 }

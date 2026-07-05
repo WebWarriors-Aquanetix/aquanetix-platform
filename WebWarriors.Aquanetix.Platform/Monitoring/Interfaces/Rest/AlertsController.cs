@@ -17,7 +17,7 @@ namespace WebWarriors.Aquanetix.Platform.Monitoring.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Alert endpoints")]
-[AllowAnonymous]     
+[Authorize]     
 public class AlertsController(
     IAlertQueryService alertQueryService,
     IAlertCommandService alertCommandService,
