@@ -1,3 +1,4 @@
 namespace WebWarriors.Aquanetix.Platform.Iam.Domain.Model;
 
-public record AuthenticatedUser(int Id, string Email, string Role);
+/// <summary>Authenticated user with the issued JWT token.</summary>
+public record AuthenticatedUser(int Id, string Email, string Role, string Token);

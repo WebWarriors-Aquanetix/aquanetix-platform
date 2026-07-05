@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using WebWarriors.Aquanetix.Platform.Iam.Application.CommandServices;
+using WebWarriors.Aquanetix.Platform.Iam.Application.Internal.OutboundServices;
 using WebWarriors.Aquanetix.Platform.Iam.Domain.Model;
 using WebWarriors.Aquanetix.Platform.Iam.Domain.Model.Aggregates;
 using WebWarriors.Aquanetix.Platform.Iam.Domain.Model.Commands;
@@ -10,7 +11,8 @@ namespace WebWarriors.Aquanetix.Platform.Iam.Application.Internal.CommandService
 
 public class SignInCommandService(
     IUserRepository userRepository,
-    PasswordHasher<User> passwordHasher)
+    PasswordHasher<User> passwordHasher,
+    ITokenService tokenService)
     : ISignInCommandService
 {
     public async Task<Result<AuthenticatedUser>> Handle(SignInCommand command, CancellationToken cancellationToken)
@@ -28,7 +30,9 @@ public class SignInCommandService(
             if (verificationResult == PasswordVerificationResult.Failed)
                 return InvalidCredentials();
 
-            return Result<AuthenticatedUser>.Success(new AuthenticatedUser(user.Id, user.Email, user.Role));
+            // Generate the JWT for the authenticated user.
+            var token = tokenService.GenerateToken(user);
+            return Result<AuthenticatedUser>.Success(new AuthenticatedUser(user.Id, user.Email, user.Role, token));
         }
         catch (OperationCanceledException)
         {
