@@ -86,4 +86,7 @@
   <data name="DestinationInUse" xml:space="preserve">
     <value>The destination is in use by a water batch or a device and cannot be deleted.</value>
   </data>
+  <data name="DeviceLimitReached" xml:space="preserve">
+         <value>You have reached the device limit of your plan. Upgrade your plan to add more devices.</value>
+  </data>
 </root>
