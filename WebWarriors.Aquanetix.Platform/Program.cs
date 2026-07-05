@@ -54,6 +54,8 @@ using WebWarriors.Aquanetix.Platform.Shared.Resources;
 using WebWarriors.Aquanetix.Platform.Shared.Resources.Errors;
 using ProblemDetailsFactory =
     WebWarriors.Aquanetix.Platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
+using WebWarriors.Aquanetix.Platform.Subscription.Interfaces.Acl;
+using WebWarriors.Aquanetix.Platform.Subscription.Application.Acl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -148,6 +150,9 @@ builder.Services.AddScoped<IMonitoringContextFacade, MonitoringContextFacade>();
 
 // Devices – ACL consumer sobre Monitoring
 builder.Services.AddScoped<IExternalMonitoringService, ExternalMonitoringService>();
+
+builder.Services.AddScoped<ISubscriptionContextFacade, SubscriptionContextFacade>();
+builder.Services.AddScoped<IExternalSubscriptionService, ExternalSubscriptionService>();
 
 var app = builder.Build();
 

@@ -5,5 +5,6 @@ public enum DevicesError
     None,
     DeviceNotFound,
     InvalidDeviceData,
-    OperationCancelled
+    OperationCancelled,
+    DeviceLimitReached
 }

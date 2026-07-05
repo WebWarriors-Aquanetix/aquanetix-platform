@@ -24,4 +24,11 @@ public class DeviceRepository : BaseRepository<Device>, IDeviceRepository
         if (thresholds.Count > 0)
             Context.Set<ThresholdConfiguration>().RemoveRange(thresholds);
     }
+
+    /// <inheritdoc />
+    public async Task<int> CountByOwnerIdAsync(int ownerId, CancellationToken cancellationToken)
+    {
+        return await Context.Set<Device>()
+            .CountAsync(d => d.OwnerId == ownerId, cancellationToken);
+    }
 }
