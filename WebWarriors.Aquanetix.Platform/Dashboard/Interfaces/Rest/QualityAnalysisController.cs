@@ -6,6 +6,7 @@ using WebWarriors.Aquanetix.Platform.Dashboard.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Dashboard.Domain.Model.Queries;
 using WebWarriors.Aquanetix.Platform.Dashboard.Interfaces.Rest.Resources;
 using WebWarriors.Aquanetix.Platform.Dashboard.Interfaces.Rest.Transform;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace WebWarriors.Aquanetix.Platform.Dashboard.Interfaces.Rest;
 
@@ -13,6 +14,7 @@ namespace WebWarriors.Aquanetix.Platform.Dashboard.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Quality Analysis endpoints")]
+[AllowAnonymous]     
 public class QualityAnalysisController(
     IQualityAnalysisQueryService qualityAnalysisQueryService,
     IQualityAnalysisCommandService qualityAnalysisCommandService)

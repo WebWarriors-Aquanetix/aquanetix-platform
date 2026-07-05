@@ -7,6 +7,7 @@ using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Queries;
 using WebWarriors.Aquanetix.Platform.Devices.Domain.Model.Command;
 using WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST.Resources;
 using WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST.Transform;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST;
 
@@ -14,6 +15,7 @@ namespace WebWarriors.Aquanetix.Platform.Devices.Interfaces.REST;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Device endpoints")]
+[AllowAnonymous]
 public class DevicesController(
     IDeviceQueryService deviceQueryService,
     IDeviceCommandService deviceCommandService)
