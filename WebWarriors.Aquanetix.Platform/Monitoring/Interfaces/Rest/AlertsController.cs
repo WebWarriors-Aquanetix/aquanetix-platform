@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using WebWarriors.Aquanetix.Platform.Monitoring.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.Monitoring.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.Monitoring.Domain.Model.Queries;
@@ -16,6 +17,7 @@ namespace WebWarriors.Aquanetix.Platform.Monitoring.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Alert endpoints")]
+[AllowAnonymous]     
 public class AlertsController(
     IAlertQueryService alertQueryService,
     IAlertCommandService alertCommandService,

@@ -2,6 +2,7 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Swashbuckle.AspNetCore.Annotations;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.CommandServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Application.QueryServices;
 using WebWarriors.Aquanetix.Platform.ServiceDesign.Domain.Model.Commands;
@@ -17,6 +18,7 @@ namespace WebWarriors.Aquanetix.Platform.ServiceDesign.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Water Batch endpoints")]
+[AllowAnonymous]     
 public class WaterBatchesController(
     IWaterBatchQueryService waterBatchQueryService,
     IWaterBatchCommandService waterBatchCommandService,

@@ -52,10 +52,13 @@ using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Persistence.EFC.Repos
 using WebWarriors.Aquanetix.Platform.Shared.Infrastructure.Pipeline.Middleware.Extensions;
 using WebWarriors.Aquanetix.Platform.Shared.Resources;
 using WebWarriors.Aquanetix.Platform.Shared.Resources.Errors;
-using ProblemDetailsFactory =
-    WebWarriors.Aquanetix.Platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
+using ProblemDetailsFactory = WebWarriors.Aquanetix.Platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 using WebWarriors.Aquanetix.Platform.Subscription.Interfaces.Acl;
 using WebWarriors.Aquanetix.Platform.Subscription.Application.Acl;
+using WebWarriors.Aquanetix.Platform.Iam.Application.Internal.OutboundServices;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Pipeline.Middleware.Extensions;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Tokens.Jwt.Services;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Tokens.Jwt.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +104,23 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Aquanetix IoT Water Quality Monitoring Platform API"
     });
     options.EnableAnnotations();
+
+    // Definición del esquema Bearer
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name         = "Authorization",
+        Type         = SecuritySchemeType.Http,
+        Scheme       = "bearer",
+        BearerFormat = "JWT",
+        In           = ParameterLocation.Header,
+        Description  = "Ingresa tu token JWT (sin escribir 'Bearer')."
+    });
+
+    // Requisito de seguridad (nueva sintaxis con delegate + OpenApiSecuritySchemeReference)
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        { new OpenApiSecuritySchemeReference("Bearer", document), new List<string>() }
+    });
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -127,28 +147,27 @@ builder.Services.AddScoped<IDeviceCommandService, DeviceCommandService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISignInCommandService, SignInCommandService>();
 builder.Services.AddScoped<PasswordHasher<User>>();
+builder.Services.AddScoped<ISignUpCommandService, SignUpCommandService>();
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ISignUpCommandService, SignUpCommandService>();
 
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);
 
-// Subscription
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
 
-// ServiceDesign – Destination
 builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
 builder.Services.AddScoped<IDestinationQueryService, DestinationQueryService>();
 builder.Services.AddScoped<IDestinationCommandService, DestinationCommandService>();
 builder.Services.AddScoped<IExternalDevicesService, ExternalDevicesService>(); 
 
-// Devices – ACL outbound facade
 builder.Services.AddScoped<IDevicesContextFacade, DevicesContextFacade>();
 
-// Monitoring – ACL outbound facade (para cascada de alertas)
 builder.Services.AddScoped<IMonitoringContextFacade, MonitoringContextFacade>();
 
-// Devices – ACL consumer sobre Monitoring
 builder.Services.AddScoped<IExternalMonitoringService, ExternalMonitoringService>();
 
 builder.Services.AddScoped<ISubscriptionContextFacade, SubscriptionContextFacade>();
@@ -182,6 +201,7 @@ app.UseSwaggerUI();
 
 app.UseCors("AllowAllPolicy");
 app.UseHttpsRedirection();
+app.UseRequestAuthorization();
 app.UseAuthorization();
 app.MapControllers();
 

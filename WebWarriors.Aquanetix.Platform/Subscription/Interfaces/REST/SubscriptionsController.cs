@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebWarriors.Aquanetix.Platform.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Queries;
 using WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.Commands;
 using WebWarriors.Aquanetix.Platform.Subscription.Domain.Model.ValueObjects;
@@ -10,6 +11,7 @@ namespace WebWarriors.Aquanetix.Platform.Subscription.Interfaces.REST;
 
 [ApiController]
 [Route("api/v1/subscriptions")]
+[AllowAnonymous]     
 public class SubscriptionsController : ControllerBase
 {
     private readonly ISubscriptionQueryService queryService;
@@ -23,7 +25,6 @@ public class SubscriptionsController : ControllerBase
         this.commandService = commandService;
     }
 
-    // GET /subscriptions/plans  — fixed catalog (no DB). Declared before "{id}".
     [HttpGet("plans")]
     public IActionResult GetPlans()
     {
@@ -32,7 +33,6 @@ public class SubscriptionsController : ControllerBase
         return Ok(plans);
     }
 
-    // GET /subscriptions  — list all subscriptions.
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -74,7 +74,6 @@ public class SubscriptionsController : ControllerBase
         return Ok(SubscriptionResourceFromEntityAssembler.ToResource(subscription));
     }
 
-    // PUT /subscriptions/{id}/plan  — change the plan (validated against catalog).
     [HttpPut("{id}/plan")]
     public async Task<IActionResult> ChangePlan(int id, [FromBody] ChangePlanResource resource)
     {
