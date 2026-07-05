@@ -19,7 +19,7 @@ namespace WebWarriors.Aquanetix.Platform.ServiceDesign.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Destination endpoints")]
-[AllowAnonymous]     
+[Authorize]     
 public class DestinationsController(
     IDestinationQueryService destinationQueryService,
     IDestinationCommandService destinationCommandService,

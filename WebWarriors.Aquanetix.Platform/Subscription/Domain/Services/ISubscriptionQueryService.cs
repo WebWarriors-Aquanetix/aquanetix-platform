@@ -7,4 +7,5 @@ public interface ISubscriptionQueryService
 {
     Task<SubscriptionEntity?> Handle(GetSubscriptionByIdQuery query);
     Task<IEnumerable<SubscriptionEntity>> Handle(GetAllSubscriptionsQuery query);
+    Task<SubscriptionEntity?> Handle(GetSubscriptionByUserIdQuery query);
 }

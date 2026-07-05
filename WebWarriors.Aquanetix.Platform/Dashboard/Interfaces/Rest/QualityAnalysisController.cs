@@ -14,7 +14,7 @@ namespace WebWarriors.Aquanetix.Platform.Dashboard.Interfaces.Rest;
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [SwaggerTag("Available Quality Analysis endpoints")]
-[AllowAnonymous]     
+[Authorize]     
 public class QualityAnalysisController(
     IQualityAnalysisQueryService qualityAnalysisQueryService,
     IQualityAnalysisCommandService qualityAnalysisCommandService)
