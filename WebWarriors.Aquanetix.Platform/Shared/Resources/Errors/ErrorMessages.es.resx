@@ -86,4 +86,7 @@
   <data name="DestinationInUse" xml:space="preserve">
     <value>El lugar de destino está en uso por un lote de agua o un dispositivo y no se puede eliminar.</value>
   </data>
+  <data name="DeviceLimitReached" xml:space="preserve">
+         <value>Alcanzaste el límite de dispositivos de tu plan. Mejora tu plan para agregar más.</value>
+  </data>
 </root>

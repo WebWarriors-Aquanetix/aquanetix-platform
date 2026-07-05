@@ -16,12 +16,29 @@ namespace WebWarriors.Aquanetix.Platform.Devices.Application.Internal.CommandSer
 public class DeviceCommandService(
     IDeviceRepository deviceRepository,
     IExternalMonitoringService externalMonitoringService,
+    IExternalSubscriptionService externalSubscriptionService,
     IUnitOfWork unitOfWork,
     IStringLocalizer<ErrorMessages> localizer)
     : IDeviceCommandService
 {
     public async Task<Result<Device>> Handle(CreateDeviceCommand command, CancellationToken cancellationToken)
     {
+        // Business rule (Phase 2): enforce the plan's device limit.
+        // Ask the Subscription context (via ACL) for the owner's device limit.
+        var deviceLimit = await externalSubscriptionService.GetDeviceLimitForUser(command.OwnerId);
+        if (deviceLimit is null)
+            // No subscription → not allowed to register devices.
+            return Result<Device>.Failure(DevicesError.DeviceLimitReached,
+                localizer[nameof(DevicesError.DeviceLimitReached)]);
+
+        if (deviceLimit != -1) // -1 means unlimited
+        {
+            var currentCount = await deviceRepository.CountByOwnerIdAsync(command.OwnerId, cancellationToken);
+            if (currentCount >= deviceLimit)
+                return Result<Device>.Failure(DevicesError.DeviceLimitReached,
+                    localizer[nameof(DevicesError.DeviceLimitReached)]);
+        }
+
         var device = new Device(
             command.OwnerId,
             command.SerialNumber,
